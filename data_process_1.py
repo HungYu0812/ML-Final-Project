@@ -17,8 +17,12 @@ deposit_type = {'Non Refund': 1, 'Refundable': 2, 'No Deposit': 3}
 customer_type = {'Transient-Party': 1,
                  'Transient': 2, 'Group': 3, 'Contract': 4}
 reservation_status = {'Check-Out': 1}
+letter = {}
+for i in range(1, 27):
+    letter[chr(i+64)] = i
+
 LIST = {'hotel': hotel, 'arrival_date_month': arrival_date_month, 'meal': meal,
-        'market_segment': market_segment, 'distribution_channel': distribution_channel, 'deposit_type': deposit_type, 'customer_type': customer_type, 'reservation_status': reservation_status}
+        'market_segment': market_segment, 'distribution_channel': distribution_channel, 'reserved_room_type': letter, 'assigned_room_type': letter, 'deposit_type': deposit_type, 'customer_type': customer_type, 'reservation_status': reservation_status}
 
 
 with open('train.csv', newline='') as csvfile:
@@ -46,6 +50,22 @@ with open('train.csv', newline='') as csvfile:
         list.append(row)
         # if count == 24:
         #   break
-output = json.dumps(list)
-with open('processed_data.json', 'w') as json_file:
-    json.dump(output, json_file)
+
+
+def saveJson(list):
+    output = json.dumps(list)
+    with open('processed_data.json', 'w') as json_file:
+        json.dump(output, json_file)
+
+
+with open('output.csv', 'w', newline='') as csvfile:
+    fieldnames = ['ID', 'hotel', 'is_canceled', 'lead_time',
+                  'arrival_date_year', 'arrival_date_month', 'arrival_date_week_number', 'arrival_date_day_of_month', 'stays_in_weekend_nights',
+                  'stays_in_week_nights', 'adults', 'children', 'babies', 'meal', 'country', 'market_segment', 'distribution_channel', 'is_repeated_guest',
+                  'previous_cancellations', 'previous_bookings_not_canceled', 'reserved_room_type', 'assigned_room_type',
+                  'booking_changes', 'deposit_type', 'agent', 'company', 'days_in_waiting_list', 'customer_type', 'adr', 'required_car_parking_spaces', 'total_of_special_requests',
+                  'reservation_status', 'reservation_status_date']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for data in list:
+        writer.writerow(data)
