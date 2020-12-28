@@ -3,7 +3,6 @@ import json
 import pycountry
 
 # 資料
-
 hotel = {'City Hotel': 1, 'Resort Hotel': 0}
 arrival_date_month = {'January': 1, 'February': 2,
                       'March': 3, 'April': 4, 'May': 5, 'June': 6,
@@ -38,7 +37,7 @@ with open('train.csv', newline='') as csvfile:
                 try:
                     row[inform] = LIST[inform][row[inform]]
                 except:
-                    pass
+                    row[inform] = ""
             if inform == 'country':
                 try:
                     _country = pycountry.countries.get(alpha_3=row[inform])
@@ -58,7 +57,7 @@ def saveJson(list):
         json.dump(output, json_file)
 
 
-with open('output.csv', 'w', newline='') as csvfile:
+with open('output02.csv', 'w', newline='') as csvfile:
     fieldnames = ['ID', 'hotel', 'is_canceled', 'lead_time',
                   'arrival_date_year', 'arrival_date_month', 'arrival_date_week_number', 'arrival_date_day_of_month', 'stays_in_weekend_nights',
                   'stays_in_week_nights', 'adults', 'children', 'babies', 'meal', 'country', 'market_segment', 'distribution_channel', 'is_repeated_guest',
