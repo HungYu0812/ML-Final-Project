@@ -1,4 +1,6 @@
 import csv
+from sklearn import preprocessing
+import numpy as np
 fieldnames = ['ID', 'hotel', 'is_canceled', 'lead_time',
               'arrival_date_year', 'arrival_date_month', 'arrival_date_week_number', 'arrival_date_day_of_month', 'stays_in_weekend_nights',
               'stays_in_week_nights', 'adults', 'children', 'babies', 'meal', 'country', 'market_segment', 'distribution_channel', 'is_repeated_guest',
@@ -25,8 +27,30 @@ with open('train.csv', newline='') as csvfile:
 
         for fieldname in fieldnames:
             dictionary[fieldname].add(row[fieldname])
-print(dictionary['reserved_room_type'])
-print(dictionary['assigned_room_type'])
+'''
+X = np.array(list(dictionary['country']))
+# print(X)
+Y = X.reshape(-1, 1)
+# print(Y)
+country = X
+Y = np.array(['' 'PAN' 'UGA' 'MEX' 'CMR' 'RWA' 'CYP' 'SYC' 'MWI' 'DNK' 'ITA' 'IDN'
+              'CYM' 'BOL' 'AZE'])
+# enc = preprocessing.OrdinalEncoder()
+enc = preprocessing.OneHotEncoder(categories=[country])
+enc.fit(Y.reshape(-1, 1))
+enc.transform(['SRB'
+Y = np.array(['', 'PAN', 'UGA', 'MEX', 'CMR', 'RWA', 'CYP', 'SYC', 'MWI', 'DNK', 'ITA', 'IDN',
+              'CYM', 'BOL', 'AZE'])
+X = Y .reshape(-1, 1)
+print(X)
+country = Y
+#enc = preprocessing.OrdinalEncoder()
+enc = preprocessing.OneHotEncoder()
+#X = [['male', 'from US', 'uses Safari'], ['female', 'from Europe', 'uses Firefox']]
+enc.fit(X)
+print(enc.transform(X).toarray())'''
+
+# print(dictionary['assigned_room_type'])
 
 '''
 for fieldname in fieldnames:
