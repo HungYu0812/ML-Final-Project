@@ -1,6 +1,7 @@
 import csv
 import json
 import pycountry
+import numpy as np
 
 # 資料
 hotel = {'City Hotel': 1, 'Resort Hotel': 0}
@@ -12,13 +13,14 @@ meal = {'BB': 1, 'HB': 2, 'SC': 3, 'FB': 4}
 market_segment = {'Online TA': 1, 'Corporate': 2,
                   'Offline TA/TO': 3, 'Groups': 4, 'Complementary': 5, 'Aviation': 6, 'Direct': 7}
 distribution_channel = {'Direct': 1, 'GDS': 2, 'Corporate': 3, 'TA/TO': 4}
-deposit_type = {'Non Refund': 1, 'Refundable': 2, 'No Deposit': 3}
-customer_type = {'Transient-Party': 1,
-                 'Transient': 2, 'Group': 3, 'Contract': 4}
-reservation_status = {'Check-Out': 1}
+deposit_type = {'Non Refund': 1, 'Refundable': 2, 'No Deposit': 0}
+customer_type = {'Transient-Party': np.array([0, 0, 0, 1]),
+                 'Transient': np.array([0, 0, 1, 0]), 'Group': np.array([0, 1, 0, 0]), 'Contract':  np.array([1, 0, 0, 0])}
+reservation_status = {'Check-Out': 1, 'Canceled': 0}
 letter = {}
 for i in range(1, 27):
-    letter[chr(i+64)] = i
+    letter[chr(i+64)] = np.zeros(26)
+    letter[chr(i+64)][i-1] = 1
 
 LIST = {'hotel': hotel, 'arrival_date_month': arrival_date_month, 'meal': meal,
         'market_segment': market_segment, 'distribution_channel': distribution_channel, 'reserved_room_type': letter, 'assigned_room_type': letter, 'deposit_type': deposit_type, 'customer_type': customer_type, 'reservation_status': reservation_status}

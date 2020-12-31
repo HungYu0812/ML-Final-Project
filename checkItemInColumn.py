@@ -12,17 +12,23 @@ dictionary = {'ID': set(), 'hotel': set(), 'is_canceled': set(), 'lead_time': se
               'assigned_room_type': set(), 'booking_changes': set(), 'deposit_type': set(), 'agent': set(), 'company': set(), 'days_in_waiting_list': set(),
               'customer_type': set(), 'adr': set(), 'required_car_parking_spaces': set(), 'total_of_special_requests': set(), 'reservation_status': set(),
               'reservation_status_date': set()}
-with open('train.csv', newline='') as csvfile:
 
+with open('train.csv', newline='') as csvfile:
     # 讀取 CSV 檔內容，將每一列轉成一個 dictionary
     rows = csv.DictReader(csvfile)
-    TOTAL = []
     # 以迴圈輸出指定欄位()
     for row in rows:
+        # if row['is_canceled'] == '1' and row['reservation_status'] != 'Canceled':
+        #   print(row['is_canceled'], row['reservation_status'])
+        # if row['is_canceled'] == '0' and row['reservation_status'] != 'Check-Out':
+        #   print(row['is_canceled'], row['reservation_status'])
+
         for fieldname in fieldnames:
             dictionary[fieldname].add(row[fieldname])
+print(dictionary['reserved_room_type'])
+print(dictionary['assigned_room_type'])
 
-
+'''
 for fieldname in fieldnames:
     if fieldname == 'ID':
         continue
@@ -30,13 +36,13 @@ for fieldname in fieldnames:
         continue
     if fieldname == 'adr':
         continue
-    if fieldname == 'company':
-        continue
-    if fieldname == 'days_in_waiting_list':
-        continue
-    if fieldname == 'agent':
-        continue
-    if fieldname == 'previous_bookings_not_canceled':
-        continue
+    # if fieldname == 'company':
+    #    continue
+    # if fieldname == 'days_in_waiting_list':
+    #    continue
+    # if fieldname == 'agent':
+    #    continue
+    # if fieldname == 'previous_bookings_not_canceled':
+    #    continue
     print(fieldname)
-    print(dictionary[fieldname])
+    print(dictionary[fieldname])'''
