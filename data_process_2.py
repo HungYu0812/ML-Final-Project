@@ -3,6 +3,8 @@ from sklearn import preprocessing
 import numpy as np
 from checkItemInColumn import*
 
+dataSize = 91530
+
 # onehotList = ['hotel', 'meal', 'country', 'market_segment', 'distribution_channel', 'reserved_room_type', 'assigned_room_type','deposit_type', 'agent', 'company', 'customer_type', 'reservation_status']
 hotel_enc = preprocessing.OneHotEncoder()
 meal_enc = preprocessing.OneHotEncoder()
@@ -24,12 +26,12 @@ for key in onehotDict:
     tempArr = np.array(list(dictionary[key]))
     onehotArr = tempArr.reshape(-1, 1)
     onehotDict[key].fit(onehotArr)
-print(onehotDict['meal'].categories_[0])
+# print(onehotDict['meal'].categories_[0])
 arrival_date_month = {'January': 1, 'February': 2,
                       'March': 3, 'April': 4, 'May': 5, 'June': 6,
                       'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12}
 with open('train.csv', newline='') as csvfile:
-    f = open('.\output.txt', 'w')
+    bigList = []
     newfield = np.array([])
     for fieldname in fieldnames:
         if fieldname == 'ID':
@@ -39,11 +41,14 @@ with open('train.csv', newline='') as csvfile:
         else:
             newfield = np.append(
                 newfield, onehotDict[fieldname].categories_[0])
-    f.write(','.join(newfield))
-    f.write('\n')
+    bigList.append(newfield)
+    # f.write(','.join(newfield))
+    # f.write('\n')
     rows = csv.DictReader(csvfile)
     count = 0
     for row in rows:
+        if count % 100 == 0:
+            print("Processing: " + str(count) + "//"+str(dataSize))
         arr = np.array([[]])
         for fieldname in fieldnames:
             newElement = row[fieldname]
@@ -52,13 +57,14 @@ with open('train.csv', newline='') as csvfile:
             if fieldname == 'arrival_date_month':
                 newElement = arrival_date_month[row[fieldname]]
             if fieldname in onehotDict:
-
-                # print(fieldname)
                 newElement = onehotDict[fieldname].transform(
                     np.array(row[fieldname]).reshape(-1, 1)).toarray()
             arr = np.append(arr, newElement)
         count = count+1
-        f.write(','.join(arr))
-        f.write('\n')
-        # if count > 0:
-        #   break
+        bigList.append(arr)
+        # f.write(','.join(arr))
+        # f.write('\n')
+        # if count > 3:
+        #    break
+    # print(len(bigList[2]))
+    np.savetxt('trainFTA.txt', np.array(bigList), fmt='%s')

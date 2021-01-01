@@ -27,30 +27,7 @@ with open('train.csv', newline='') as csvfile:
 
         for fieldname in fieldnames:
             dictionary[fieldname].add(row[fieldname])
-'''
-X = np.array(list(dictionary['country']))
-# print(X)
-Y = X.reshape(-1, 1)
-# print(Y)
-country = X
-Y = np.array(['' 'PAN' 'UGA' 'MEX' 'CMR' 'RWA' 'CYP' 'SYC' 'MWI' 'DNK' 'ITA' 'IDN'
-              'CYM' 'BOL' 'AZE'])
-# enc = preprocessing.OrdinalEncoder()
-enc = preprocessing.OneHotEncoder(categories=[country])
-enc.fit(Y.reshape(-1, 1))
-enc.transform(['SRB'
-Y = np.array(['', 'PAN', 'UGA', 'MEX', 'CMR', 'RWA', 'CYP', 'SYC', 'MWI', 'DNK', 'ITA', 'IDN',
-              'CYM', 'BOL', 'AZE'])
-X = Y .reshape(-1, 1)
-print(X)
-country = Y
-#enc = preprocessing.OrdinalEncoder()
-enc = preprocessing.OneHotEncoder()
-#X = [['male', 'from US', 'uses Safari'], ['female', 'from Europe', 'uses Firefox']]
-enc.fit(X)
-print(enc.transform(X).toarray())'''
 
-# print(dictionary['assigned_room_type'])
 
 '''
 for fieldname in fieldnames:
