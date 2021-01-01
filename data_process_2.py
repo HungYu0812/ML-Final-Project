@@ -36,6 +36,11 @@ with open('train.csv', newline='') as csvfile:
     for fieldname in fieldnames:
         if fieldname == 'ID':
             continue
+        if fieldname == 'reservation_status_date':
+            newfield = np.append(newfield, 'reservation_status_date_year')
+            newfield = np.append(newfield, 'reservation_status_date_month')
+            newfield = np.append(newfield, 'reservation_status_date_date')
+            continue
         if fieldname not in onehotDict:
             newfield = np.append(newfield, fieldname)
         else:
@@ -56,6 +61,8 @@ with open('train.csv', newline='') as csvfile:
                 continue
             if fieldname == 'arrival_date_month':
                 newElement = arrival_date_month[row[fieldname]]
+            if fieldname == 'reservation_status_date':
+                newElement = row[fieldname].split('/')
             if fieldname in onehotDict:
                 newElement = onehotDict[fieldname].transform(
                     np.array(row[fieldname]).reshape(-1, 1)).toarray()
@@ -67,4 +74,7 @@ with open('train.csv', newline='') as csvfile:
         # if count > 3:
         #    break
     # print(len(bigList[2]))
-    np.savetxt('trainFTA.txt', np.array(bigList), fmt='%s')
+    print("Saving txt...")
+    np.savetxt('trainFTA.txt', np.array(bigList), fmt='%s', delimiter=',')
+    #np.savetxt('txtfile.txt', np.array(bigList), fmt='%s', delimiter=',')
+    print("Done!")
