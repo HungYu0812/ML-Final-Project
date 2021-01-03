@@ -22,6 +22,11 @@ onehotDict = {'hotel': hotel_enc, 'meal': meal_enc, 'country': country_enc, 'mar
               'distribution_channel': distribution_channel_enc,
               'reserved_room_type': room_type_enc, 'assigned_room_type': room_type_enc, 'deposit_type': deposit_type_enc,
               'agent': agent_enc, 'company': company_enc, 'customer_type': customer_type_enc, 'reservation_status': reservation_status_enc}
+ignored_list_for_fieldname = np.array(['is_canceled', 'adr',
+                                       'Canceled', 'Check-Out', 'No-Show',
+                                       'reservation_status_date_year', 'reservation_status_date_month', 'reservation_status_date_date'])
+ignored_list = np.array(['is_canceled', 'adr',
+                         'reservation_status', 'reservation_status_date'])
 for key in onehotDict:
     if key == 'reserved_room_type' or key == 'assigned_room_type':
         pass
@@ -44,18 +49,16 @@ with open('train.csv', newline='') as csvfile:
     bigList = []
     newfield = np.array([])
     for fieldname in fieldnames:
-        if fieldname == 'ID':
+        if fieldname in ignored_list:
             continue
-        if fieldname == 'reservation_status_date':
-            newfield = np.append(newfield, 'reservation_status_date_year')
-            newfield = np.append(newfield, 'reservation_status_date_month')
-            newfield = np.append(newfield, 'reservation_status_date_date')
+        if fieldname == 'ID':
             continue
         if fieldname not in onehotDict:
             newfield = np.append(newfield, fieldname)
         else:
             newfield = np.append(
                 newfield, onehotDict[fieldname].categories_[0])
+    newfield = np.append(newfield, ignored_list_for_fieldname)
     bigList.append(newfield)
     # f.write(','.join(newfield))
     # f.write('\n')
@@ -67,24 +70,34 @@ with open('train.csv', newline='') as csvfile:
         arr = np.array([[]])
         for fieldname in fieldnames:
             newElement = row[fieldname]
+            if fieldname in ignored_list:
+                continue
             if fieldname == 'ID':
                 continue
             if fieldname == 'arrival_date_month':
                 newElement = arrival_date_month[row[fieldname]]
+            if fieldname in onehotDict:
+                newElement = onehotDict[fieldname].transform(
+                    np.array(row[fieldname]).reshape(-1, 1)).toarray()
+            arr = np.append(arr, newElement)
+        for fieldname in ignored_list:
+            newElement = row[fieldname]
             if fieldname == 'reservation_status_date':
                 newElement = row[fieldname].split('/')
             if fieldname in onehotDict:
                 newElement = onehotDict[fieldname].transform(
                     np.array(row[fieldname]).reshape(-1, 1)).toarray()
             arr = np.append(arr, newElement)
+
         count = count+1
         bigList.append(arr)
         # f.write(','.join(arr))
         # f.write('\n')
-        if count > 500:
+        if count > 9999:
             break
     # print(len(bigList[2]))
     print("Saving txt...")
     # np.savetxt('trainFTA.txt', np.array(bigList), fmt='%s', delimiter=',')
-    np.savetxt('txtfile.txt', np.array(bigList), fmt='%s', delimiter=',')
+    np.savetxt('eeeeeeeeeetxtfile.txt', np.array(
+        bigList), fmt='%s', delimiter=',')
     print("Done!")
